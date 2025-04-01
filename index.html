@@ -3,38 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>dynamic cards</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Simple Calculator</title>
     <style>
         body {
-            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #222;
         }
-
-        .card {
+        .calculator {
+            background: #333;
+            padding: 20px;
             border-radius: 10px;
-            overflow: hidden;
-            transition: transform 0.3s;
+            text-align: center;
         }
-
-        .card:hover {
-            transform: scale(1.05);
+        .display {
+            width: 100%;
+            height: 50px;
+            text-align: right;
+            font-size: 1.5em;
+            margin-bottom: 10px;
         }
-
-        .card img {
-            height: 250px;
-            object-fit: cover;
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 50px);
+            gap: 5px;
         }
+        button {
+            width: 50px;
+            height: 50px;
+            font-size: 1.2em;
+            border: none;
+            cursor: pointer;
+            background: gray;
+            color: white;
+        }
+        .operator { background: orange; }
     </style>
 </head>
 <body>
-<div class="container mt-4">
-    <h2 class="text-center mb-4">Trending Products</h2>
-    <div class="row" id="card-container">
-        
+    <div class="calculator">
+        <input type="text" class="display" id="display" disabled>
+        <div class="buttons" id="buttons"></div>
     </div>
-</div>
 
-<script src="script.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // json fetch data 
+        const buttonsData = [
+            { label: '+', class: 'operator' }, { label: '7' }, { label: '8' }, { label: '9' },
+            { label: '-', class: 'operator' }, { label: '4' }, { label: '5' }, { label: '6' },
+            { label: '*', class: 'operator' }, { label: '1' }, { label: '2' }, { label: '3' },
+            { label: '/', class: 'operator' }, { label: '0' }, { label: '=', class: 'operator' }, { label: 'C', class: 'operator' }
+        ];
+// javascript
+        const buttonsContainer = document.getElementById('buttons');
+        const display = document.getElementById('display');
+
+        buttonsData.forEach(btn => {
+            const button = document.createElement('button');
+            button.textContent = btn.label;
+            if (btn.class) button.classList.add(btn.class);
+            button.addEventListener('click', () => handleButtonClick(btn.label));
+            buttonsContainer.appendChild(button);
+        });
+
+        function handleButtonClick(value) {
+            if (value === '=') {
+                try { display.value = eval(display.value); } catch { display.value = 'Error'; }
+            } else if (value === 'C') {
+                display.value = '';
+            } else {
+                display.value += value;
+            }
+        }
+    </script>
 </body>
 </html>
